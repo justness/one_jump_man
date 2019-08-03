@@ -16,7 +16,7 @@ public class SqueezeDeath : MonoBehaviour
     {
         if (!other.isTrigger) {
             GetComponentInParent<PlayerController>().Die();
-            Debug.Log("Squeeze!");
+            //Debug.Log("Squeeze!");
         }
     }
 }
