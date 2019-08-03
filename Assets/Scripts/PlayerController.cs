@@ -3,7 +3,7 @@ using UnityEngine.Events;
 
 public class PlayerController : MonoBehaviour
 {
-    public Rigidbody2D rb { get; private set; }
+    private Rigidbody2D rb;
     private Collider2D col;
     public float jumpVelocity = 7;
     public float groundVelocity = 4;
@@ -11,14 +11,10 @@ public class PlayerController : MonoBehaviour
     public float fallMod = 2.5f;
 
     // Current state data, updated every frame
-    public bool Grounded { get; private set; }
+    private bool grounded;
     private bool touchingLeft;
     private bool touchingRight;
-    public bool FacingRight { get; private set; }
-
-    // Input data
-    private float horizontalInput;
-    private bool jumping;
+    public bool facingRight { get; private set; }
 
     private void Start()
     {
@@ -29,14 +25,16 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         CheckBounds();
-        horizontalInput = Input.GetAxis("Horizontal");
-        jumping = Input.GetButtonDown("Jump");
+    }
 
+    private void FixedUpdate()
+    {
+        float horizontalInput = Input.GetAxis("Horizontal");
         float horizontalMovement;
 
         // The following code is horrible yet I cannot think of a way to make it less so.
         // Set horizontal speed modifier
-        if (Grounded)
+        if (grounded)
         {
             horizontalMovement = horizontalInput * groundVelocity;
         }
@@ -48,11 +46,11 @@ public class PlayerController : MonoBehaviour
         // Set facing (for sprite purposes)
         if (horizontalInput < 0)
         {
-            FacingRight = false;
+            facingRight = false;
         }
         else if (horizontalInput > 0)
         {
-            FacingRight = true;
+            facingRight = true;
         }
 
         // Check if player is touching a wall before applying horizontal movement
@@ -62,15 +60,15 @@ public class PlayerController : MonoBehaviour
         }
 
         // Jump if grounded
-        if (jumping && Grounded)
+        if (Input.GetButtonDown("Jump") && grounded)
         {
             rb.velocity = new Vector2(rb.velocity.x, Vector2.up.y * jumpVelocity);
         }
 
         // Faster falling for more weightiness
-        if (jumping || rb.velocity.y < 0)
+        if (!Input.GetButton("Jump") || rb.velocity.y < 0)
         {
-            rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMod - 1) * Time.deltaTime;
+            rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMod-1) * Time.deltaTime;
         }
     }
 
@@ -82,12 +80,12 @@ public class PlayerController : MonoBehaviour
 
         Vector2 bottomLeft = new Vector2(transform.position.x - col.bounds.extents.x, transform.position.y - col.bounds.extents.y);
         Vector2 bottomRight = new Vector2(transform.position.x + col.bounds.extents.x, transform.position.y - col.bounds.extents.y);
-        Grounded = false;
+        grounded = false;
         // Debug.Log(bottom.x + ", " + bottom.y);
         RaycastHit2D[] results = Physics2D.LinecastAll(bottomLeft + new Vector2(0, -offset), bottomRight + new Vector2(0, -offset));
         foreach (RaycastHit2D result in results){
             if (result.collider != col) {
-                Grounded = true;
+                grounded = true;
                 //Debug.Log("BEEP BOOP I'M TOUCHING THE GROUND");
             }
         }
