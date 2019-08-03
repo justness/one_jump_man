@@ -3,7 +3,7 @@ using UnityEngine.Events;
 
 public class PlayerController : MonoBehaviour
 {
-    private Rigidbody2D rb;
+    public Rigidbody2D rb { get; private set; }
     private Collider2D col;
     public float jumpVelocity = 7;
     public float groundVelocity = 4;
@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
     public float fallMod = 2.5f;
 
     // Current state data, updated every frame
-    private bool grounded;
+    public bool Grounded { get; private set; }
     private bool touchingLeft;
     private bool touchingRight;
     public bool FacingRight { get; private set; }
@@ -36,7 +36,7 @@ public class PlayerController : MonoBehaviour
 
         // The following code is horrible yet I cannot think of a way to make it less so.
         // Set horizontal speed modifier
-        if (grounded)
+        if (Grounded)
         {
             horizontalMovement = horizontalInput * groundVelocity;
         }
@@ -62,7 +62,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // Jump if grounded
-        if (jumping && grounded)
+        if (jumping && Grounded)
         {
             rb.velocity = new Vector2(rb.velocity.x, Vector2.up.y * jumpVelocity);
         }
@@ -82,12 +82,12 @@ public class PlayerController : MonoBehaviour
 
         Vector2 bottomLeft = new Vector2(transform.position.x - col.bounds.extents.x, transform.position.y - col.bounds.extents.y);
         Vector2 bottomRight = new Vector2(transform.position.x + col.bounds.extents.x, transform.position.y - col.bounds.extents.y);
-        grounded = false;
+        Grounded = false;
         // Debug.Log(bottom.x + ", " + bottom.y);
         RaycastHit2D[] results = Physics2D.LinecastAll(bottomLeft + new Vector2(0, -offset), bottomRight + new Vector2(0, -offset));
         foreach (RaycastHit2D result in results){
             if (result.collider != col) {
-                grounded = true;
+                Grounded = true;
                 //Debug.Log("BEEP BOOP I'M TOUCHING THE GROUND");
             }
         }
