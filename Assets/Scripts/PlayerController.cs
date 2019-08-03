@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private Collider2D col;
     public float jumpVelocity = 7;
+    public float weakJumpVelocity = 2;
     public float groundVelocity = 4;
     public float airVelocity = 2;
     public float fallMod = 2.5f;
@@ -68,7 +69,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // Jumping with delay 
-        if (JumpPressed && Grounded && !jumpUsed)
+        if (JumpPressed && Grounded)
         {
             canJump = Time.time + jumpLag;
         }
@@ -77,9 +78,16 @@ public class PlayerController : MonoBehaviour
         { 
             if (canJump > 0 && Time.time > canJump && Grounded)
             {
-                rb.velocity = new Vector2(rb.velocity.x, Vector2.up.y * jumpVelocity);
+                if (!jumpUsed)
+                {
+                    rb.velocity = new Vector2(rb.velocity.x, Vector2.up.y * jumpVelocity);
+                    jumpUsed = true;
+                }
+                else
+                {
+                    rb.velocity = new Vector2(rb.velocity.x, Vector2.up.y * weakJumpVelocity);
+                }
                 canJump = 0.0f;
-                jumpUsed = true;
             }
             else if (canJump > 0 && !Grounded)
             {
