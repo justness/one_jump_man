@@ -537,7 +537,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jumpVelocity: 7
-  groundVelocity: 4
+  groundVelocity: 2
   airVelocity: 4
   fallMod: 2
 --- !u!50 &979154192
