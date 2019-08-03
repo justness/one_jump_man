@@ -147,8 +147,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 465983124}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 4.6220956, y: -1.0433345, z: 0}
-  m_LocalScale: {x: 3.3863301, y: 3.1947095, z: 1}
+  m_LocalPosition: {x: 4.72, y: -2.027, z: 0}
+  m_LocalScale: {x: 3.3863301, y: 2.7985656, z: 1}
   m_Children: []
   m_Father: {fileID: 1159001882}
   m_RootOrder: 0
@@ -540,7 +540,7 @@ MonoBehaviour:
   groundVelocity: 2
   airVelocity: 2
   fallMod: 2
-  jumpLag: 0.7
+  jumpLag: 0.6
 --- !u!50 &979154192
 Rigidbody2D:
   serializedVersion: 4
@@ -655,8 +655,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1175371454}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.9, y: -4.31, z: 0}
-  m_LocalScale: {x: 3.2418437, y: 2.3159876, z: 1}
+  m_LocalPosition: {x: -1.382, y: -4.31, z: 0}
+  m_LocalScale: {x: 4.279234, y: 2.3159876, z: 1}
   m_Children: []
   m_Father: {fileID: 1159001882}
   m_RootOrder: 2
@@ -760,8 +760,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1346939121}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 4.6460958, y: -3.3363347, z: 0}
-  m_LocalScale: {x: 5.383741, y: 4.94537, z: 1}
+  m_LocalPosition: {x: 4.6460958, y: -3.657, z: 0}
+  m_LocalScale: {x: 5.383741, y: 4.302472, z: 1}
   m_Children: []
   m_Father: {fileID: 1159001882}
   m_RootOrder: 1
