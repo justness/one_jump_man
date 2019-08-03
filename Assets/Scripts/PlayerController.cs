@@ -1,24 +1,28 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Events;
 
 public class PlayerController : MonoBehaviour
 {
-    public Rigidbody2D rb { get; private set; }
+    private Rigidbody2D rb;
     private Collider2D col;
     public float jumpVelocity = 7;
     public float groundVelocity = 4;
     public float airVelocity = 2;
     public float fallMod = 2.5f;
+    public float jumpLag;
 
     // Current state data, updated every frame
     public bool Grounded { get; private set; }
     private bool touchingLeft;
     private bool touchingRight;
     public bool FacingRight { get; private set; }
+    private float canJump;
 
     // Input data
     private float horizontalInput;
-    private bool jumping;
+    public bool JumpPressed { get; private set; }
+    private bool JumpHeld;
 
     private void Start()
     {
@@ -30,7 +34,8 @@ public class PlayerController : MonoBehaviour
     {
         CheckBounds();
         horizontalInput = Input.GetAxis("Horizontal");
-        jumping = Input.GetButtonDown("Jump");
+        JumpPressed = Input.GetButtonDown("Jump");
+        JumpHeld = Input.GetButton("Jump");
 
         float horizontalMovement;
 
@@ -61,14 +66,27 @@ public class PlayerController : MonoBehaviour
             rb.velocity = new Vector2(horizontalMovement, rb.velocity.y);
         }
 
-        // Jump if grounded
-        if (jumping && Grounded)
+        // Jumping with delay 
+        if (JumpPressed && Grounded)
         {
-            rb.velocity = new Vector2(rb.velocity.x, Vector2.up.y * jumpVelocity);
+            canJump = Time.time + jumpLag;
+        }
+
+        if (JumpHeld)
+        { 
+            if (canJump > 0 && Time.time > canJump && Grounded)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, Vector2.up.y * jumpVelocity);
+                canJump = 0.0f;
+            }
+            else if (canJump > 0 && !Grounded)
+            {
+                canJump = 0.0f;
+            }
         }
 
         // Faster falling for more weightiness
-        if (jumping || rb.velocity.y < 0)
+        if (!JumpHeld || rb.velocity.y < 0)
         {
             rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMod - 1) * Time.deltaTime;
         }
@@ -119,6 +137,11 @@ public class PlayerController : MonoBehaviour
                 //Debug.Log("BEEP BOOP I'M TOUCHING THE RIGHT WALL");
             }
         }
+    }
+
+    public float getHorizontalSpeed()
+    {
+        return Math.Abs(rb.velocity.x);
     }
     
 }
