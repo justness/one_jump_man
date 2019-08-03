@@ -1,0 +1,123 @@
+﻿using UnityEngine;
+using UnityEngine.Events;
+
+public class PlayerController : MonoBehaviour
+{
+    private Rigidbody2D rb;
+    private Collider2D col;
+    public float jumpVelocity = 7;
+    public float groundVelocity = 4;
+    public float airVelocity = 4;
+    //public float fallMod = 0.02f;
+    //public float maxFallVelocity = 2.2f;
+
+    // Current state data, updated every frame
+    private bool grounded;
+    private bool touchingLeft;
+    private bool touchingRight;
+    private bool facingRight;
+
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        col = GetComponent<Collider2D>();
+    }
+
+    private void Update()
+    {
+        CheckBounds();
+    }
+
+    private void FixedUpdate()
+    {
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float horizontalMovement;
+
+        // The following code is horrible yet I cannot think of a way to make it less so.
+        // Set horizontal speed modifier
+        if (grounded)
+        {
+            horizontalMovement = horizontalInput * groundVelocity;
+        }
+        else
+        {
+            horizontalMovement = horizontalInput * airVelocity;
+        }
+
+        // Set facing (for sprite purposes)
+        if (horizontalInput < 0)
+        {
+            facingRight = false;
+        }
+        else if (horizontalInput > 0)
+        {
+            facingRight = true;
+        }
+
+        // Check if player is touching a wall before applying horizontal movement
+        if (horizontalInput < 0 && !touchingLeft || horizontalInput > 0 && !touchingRight)
+        {
+            rb.velocity = new Vector2(horizontalMovement, rb.velocity.y);
+        }
+
+        // Jump if grounded
+        if (Input.GetButtonDown("Jump") && grounded)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, Vector2.up.y * jumpVelocity);
+        }
+
+        // Fall a bit faster
+        //if (rb.velocity.y < 0 && rb.velocity.y > -maxFallVelocity)
+        //{
+        //    rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * fallMod);
+        //}
+    }
+
+    private void CheckBounds()
+    {
+        float offset = 0.03f;
+        // These all work by drawing a line slightly offset from the edges of the collider, then checking for objects hit.
+        // Can be hypothetically modified to check for types of platforms and shit.
+
+        Vector2 bottomLeft = new Vector2(transform.position.x - col.bounds.extents.x, transform.position.y - col.bounds.extents.y);
+        Vector2 bottomRight = new Vector2(transform.position.x + col.bounds.extents.x, transform.position.y - col.bounds.extents.y);
+        grounded = false;
+        // Debug.Log(bottom.x + ", " + bottom.y);
+        RaycastHit2D[] results = Physics2D.LinecastAll(bottomLeft + new Vector2(0, -offset), bottomRight + new Vector2(0, -offset));
+        foreach (RaycastHit2D result in results){
+            if (result.collider != col) {
+                grounded = true;
+                Debug.Log("BEEP BOOP I'M TOUCHING THE GROUND");
+            }
+        }
+
+        Vector2 leftTop = new Vector2(transform.position.x - col.bounds.extents.x, transform.position.y + col.bounds.extents.y);
+        Vector2 leftBottom = new Vector2(transform.position.x - col.bounds.extents.x, transform.position.y - col.bounds.extents.y);
+        touchingLeft = false;
+        // Debug.Log(bottom.x + ", " + bottom.y);
+        results = Physics2D.LinecastAll(leftTop + new Vector2(-offset, 0), leftBottom + new Vector2(-offset, 0));
+        foreach (RaycastHit2D result in results)
+        {
+            if (result.collider != col)
+            {
+                touchingLeft = true;
+                Debug.Log("BEEP BOOP I'M TOUCHING THE LEFT WALL");
+            }
+        }
+
+        Vector2 rightTop = new Vector2(transform.position.x + col.bounds.extents.x, transform.position.y + col.bounds.extents.y);
+        Vector2 rightBottom = new Vector2(transform.position.x + col.bounds.extents.x, transform.position.y - col.bounds.extents.y);
+        touchingRight = false;
+        // Debug.Log(bottom.x + ", " + bottom.y);
+        results = Physics2D.LinecastAll(rightTop + new Vector2(offset, 0), rightBottom + new Vector2(offset, 0));
+        foreach (RaycastHit2D result in results)
+        {
+            if (result.collider != col)
+            {
+                touchingRight = true;
+                Debug.Log("BEEP BOOP I'M TOUCHING THE RIGHT WALL");
+            }
+        }
+    }
+    
+}
