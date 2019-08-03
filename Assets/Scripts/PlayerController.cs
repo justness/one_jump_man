@@ -31,10 +31,7 @@ public class PlayerController : MonoBehaviour
         CheckBounds();
         horizontalInput = Input.GetAxis("Horizontal");
         jumping = Input.GetButtonDown("Jump");
-    }
 
-    private void FixedUpdate()
-    {
         float horizontalMovement;
 
         // The following code is horrible yet I cannot think of a way to make it less so.
@@ -73,7 +70,7 @@ public class PlayerController : MonoBehaviour
         // Faster falling for more weightiness
         if (jumping || rb.velocity.y < 0)
         {
-            rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMod-1) * Time.deltaTime;
+            rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMod - 1) * Time.deltaTime;
         }
     }
 
