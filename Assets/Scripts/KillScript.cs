@@ -22,7 +22,7 @@ public class KillScript : MonoBehaviour
     {
         if (collision.tag == "Player")
         {
-            Application.LoadLevel(Application.loadedLevel);
+            collision.GetComponent<PlayerController>().Die();
         }
     }
 }

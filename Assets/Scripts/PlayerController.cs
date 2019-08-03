@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class PlayerController : MonoBehaviour
     public float airVelocity = 2;
     public float fallMod = 2.5f;
     public float jumpLag;
+
+    public Collider2D squeezebox;
 
     // Current state data, updated every frame
     public bool Grounded { get; private set; }
@@ -118,6 +121,11 @@ public class PlayerController : MonoBehaviour
         {
             transform.parent = null;
         }
+    }
+
+    public void Die()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     private void CheckBounds()
