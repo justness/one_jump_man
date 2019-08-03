@@ -12,9 +12,11 @@ public class SqueezeDeath : MonoBehaviour
     }
 
     // Update is called once per frame
-    private void OnTriggerStay2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D  other)
     {
-        GetComponentInParent<PlayerController>().Die();
-        Debug.Log("Squeeze!");
+        if (!other.isTrigger) {
+            GetComponentInParent<PlayerController>().Die();
+            Debug.Log("Squeeze!");
+        }
     }
 }
