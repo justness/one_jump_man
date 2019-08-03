@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     private bool touchingRight;
     public bool FacingRight { get; private set; }
     private float canJump;
+    private bool jumpUsed = false;
 
     // Input data
     private float horizontalInput;
@@ -67,7 +68,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // Jumping with delay 
-        if (JumpPressed && Grounded)
+        if (JumpPressed && Grounded && !jumpUsed)
         {
             canJump = Time.time + jumpLag;
         }
@@ -78,6 +79,7 @@ public class PlayerController : MonoBehaviour
             {
                 rb.velocity = new Vector2(rb.velocity.x, Vector2.up.y * jumpVelocity);
                 canJump = 0.0f;
+                jumpUsed = true;
             }
             else if (canJump > 0 && !Grounded)
             {
