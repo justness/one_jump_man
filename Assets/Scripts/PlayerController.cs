@@ -7,9 +7,8 @@ public class PlayerController : MonoBehaviour
     private Collider2D col;
     public float jumpVelocity = 7;
     public float groundVelocity = 4;
-    public float airVelocity = 4;
-    //public float fallMod = 0.02f;
-    //public float maxFallVelocity = 2.2f;
+    public float airVelocity = 2;
+    public float fallMod = 2.5f;
 
     // Current state data, updated every frame
     private bool grounded;
@@ -66,11 +65,11 @@ public class PlayerController : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x, Vector2.up.y * jumpVelocity);
         }
 
-        // Fall a bit faster
-        //if (rb.velocity.y < 0 && rb.velocity.y > -maxFallVelocity)
-        //{
-        //    rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * fallMod);
-        //}
+        // Faster falling for more weightiness
+        if (!Input.GetButton("Jump") || rb.velocity.y < 0)
+        {
+            rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMod-1) * Time.deltaTime;
+        }
     }
 
     private void CheckBounds()
@@ -87,7 +86,7 @@ public class PlayerController : MonoBehaviour
         foreach (RaycastHit2D result in results){
             if (result.collider != col) {
                 grounded = true;
-                Debug.Log("BEEP BOOP I'M TOUCHING THE GROUND");
+                //Debug.Log("BEEP BOOP I'M TOUCHING THE GROUND");
             }
         }
 
@@ -101,7 +100,7 @@ public class PlayerController : MonoBehaviour
             if (result.collider != col)
             {
                 touchingLeft = true;
-                Debug.Log("BEEP BOOP I'M TOUCHING THE LEFT WALL");
+                //Debug.Log("BEEP BOOP I'M TOUCHING THE LEFT WALL");
             }
         }
 
@@ -115,7 +114,7 @@ public class PlayerController : MonoBehaviour
             if (result.collider != col)
             {
                 touchingRight = true;
-                Debug.Log("BEEP BOOP I'M TOUCHING THE RIGHT WALL");
+                //Debug.Log("BEEP BOOP I'M TOUCHING THE RIGHT WALL");
             }
         }
     }
