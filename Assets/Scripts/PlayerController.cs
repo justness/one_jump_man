@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
     private bool grounded;
     private bool touchingLeft;
     private bool touchingRight;
-    private bool facingRight;
+    public bool facingRight { get; private set; }
 
     private void Start()
     {
