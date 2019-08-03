@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     public bool FacingRight { get; private set; }
     private float canJump;
     private bool jumpUsed = false;
+    private bool grab;
 
     // Input data
     private float horizontalInput;
@@ -30,6 +31,7 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         col = GetComponent<Collider2D>();
+        FacingRight = true;
     }
 
     private void Update()
@@ -38,19 +40,9 @@ public class PlayerController : MonoBehaviour
         horizontalInput = Input.GetAxis("Horizontal");
         JumpPressed = Input.GetButtonDown("Jump");
         JumpHeld = Input.GetButton("Jump");
+        //grab = Input.GetButton("Jump");
 
         float horizontalMovement;
-
-        // The following code is horrible yet I cannot think of a way to make it less so.
-        // Set horizontal speed modifier
-        if (Grounded)
-        {
-            horizontalMovement = horizontalInput * groundVelocity;
-        }
-        else
-        {
-            horizontalMovement = horizontalInput * airVelocity;
-        }
 
         // Set facing (for sprite purposes)
         if (horizontalInput < 0)
@@ -60,6 +52,16 @@ public class PlayerController : MonoBehaviour
         else if (horizontalInput > 0)
         {
             FacingRight = true;
+        }
+
+        // Set horizontal speed modifier
+        if (Grounded)
+        {
+            horizontalMovement = horizontalInput * groundVelocity;
+        }
+        else
+        {
+            horizontalMovement = horizontalInput * airVelocity;
         }
 
         // Check if player is touching a wall before applying horizontal movement
@@ -102,6 +104,22 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.gameObject.tag == "Platform")
+        {
+            transform.parent = other.transform;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.tag == "Platform")
+        {
+            transform.parent = null;
+        }
+    }
+
     private void CheckBounds()
     {
         float offset = 0.03f;
@@ -124,7 +142,7 @@ public class PlayerController : MonoBehaviour
         Vector2 leftBottom = new Vector2(transform.position.x - col.bounds.extents.x, transform.position.y - col.bounds.extents.y);
         touchingLeft = false;
         // Debug.Log(bottom.x + ", " + bottom.y);
-        results = Physics2D.LinecastAll(leftTop + new Vector2(-offset, 0), leftBottom + new Vector2(-offset, 0));
+        results = Physics2D.LinecastAll(leftTop + new Vector2(-offset, 0), leftBottom + new Vector2(-offset, 0.1f));
         foreach (RaycastHit2D result in results)
         {
             if (result.collider != col)
@@ -138,7 +156,7 @@ public class PlayerController : MonoBehaviour
         Vector2 rightBottom = new Vector2(transform.position.x + col.bounds.extents.x, transform.position.y - col.bounds.extents.y);
         touchingRight = false;
         // Debug.Log(bottom.x + ", " + bottom.y);
-        results = Physics2D.LinecastAll(rightTop + new Vector2(offset, 0), rightBottom + new Vector2(offset, 0));
+        results = Physics2D.LinecastAll(rightTop + new Vector2(offset, 0), rightBottom + new Vector2(offset, 0.1f));
         foreach (RaycastHit2D result in results)
         {
             if (result.collider != col)
