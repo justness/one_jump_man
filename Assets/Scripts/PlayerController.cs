@@ -14,7 +14,11 @@ public class PlayerController : MonoBehaviour
     private bool grounded;
     private bool touchingLeft;
     private bool touchingRight;
-    public bool facingRight { get; private set; }
+    public bool FacingRight { get; private set; }
+
+    // Input data
+    private float horizontalInput;
+    private bool jumping;
 
     private void Start()
     {
@@ -25,11 +29,12 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         CheckBounds();
+        horizontalInput = Input.GetAxis("Horizontal");
+        jumping = Input.GetButtonDown("Jump");
     }
 
     private void FixedUpdate()
     {
-        float horizontalInput = Input.GetAxis("Horizontal");
         float horizontalMovement;
 
         // The following code is horrible yet I cannot think of a way to make it less so.
@@ -46,11 +51,11 @@ public class PlayerController : MonoBehaviour
         // Set facing (for sprite purposes)
         if (horizontalInput < 0)
         {
-            facingRight = false;
+            FacingRight = false;
         }
         else if (horizontalInput > 0)
         {
-            facingRight = true;
+            FacingRight = true;
         }
 
         // Check if player is touching a wall before applying horizontal movement
@@ -60,13 +65,13 @@ public class PlayerController : MonoBehaviour
         }
 
         // Jump if grounded
-        if (Input.GetButtonDown("Jump") && grounded)
+        if (jumping && grounded)
         {
             rb.velocity = new Vector2(rb.velocity.x, Vector2.up.y * jumpVelocity);
         }
 
         // Faster falling for more weightiness
-        if (!Input.GetButton("Jump") || rb.velocity.y < 0)
+        if (jumping || rb.velocity.y < 0)
         {
             rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMod-1) * Time.deltaTime;
         }

@@ -16,6 +16,6 @@ public class PlayerGraphics : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        spriteRenderer.flipX = !(playerController.facingRight);
+        spriteRenderer.flipX = !(playerController.FacingRight);
     }
 }
