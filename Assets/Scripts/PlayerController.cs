@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
     public float groundVelocity = 4;
     public float airVelocity = 2;
     public float fallMod = 2.5f;
-    public float jumpLag;
+    public float jumpLag = 0.6f;
 
     // Current state data, updated every frame
     public bool Grounded { get; private set; }
@@ -99,6 +99,22 @@ public class PlayerController : MonoBehaviour
         if (!JumpHeld || rb.velocity.y < 0)
         {
             rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMod - 1) * Time.deltaTime;
+        }
+    }
+
+    private void OnTriggerStay2D(Collider other)
+    {
+        if (other.tag == "Platform")
+        {
+            transform.parent = other.transform;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider other)
+    {
+        if (other.tag == "Platform")
+        {
+            transform.parent = null;
         }
     }
 
