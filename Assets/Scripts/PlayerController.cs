@@ -124,7 +124,7 @@ public class PlayerController : MonoBehaviour
         Vector2 leftBottom = new Vector2(transform.position.x - col.bounds.extents.x, transform.position.y - col.bounds.extents.y);
         touchingLeft = false;
         // Debug.Log(bottom.x + ", " + bottom.y);
-        results = Physics2D.LinecastAll(leftTop + new Vector2(-offset, 0), leftBottom + new Vector2(-offset, 0));
+        results = Physics2D.LinecastAll(leftTop + new Vector2(-offset, 0.1f), leftBottom + new Vector2(-offset, 0.1f));
         foreach (RaycastHit2D result in results)
         {
             if (result.collider != col)
@@ -138,7 +138,7 @@ public class PlayerController : MonoBehaviour
         Vector2 rightBottom = new Vector2(transform.position.x + col.bounds.extents.x, transform.position.y - col.bounds.extents.y);
         touchingRight = false;
         // Debug.Log(bottom.x + ", " + bottom.y);
-        results = Physics2D.LinecastAll(rightTop + new Vector2(offset, 0), rightBottom + new Vector2(offset, 0));
+        results = Physics2D.LinecastAll(rightTop + new Vector2(offset, 0.1f), rightBottom + new Vector2(offset, 0.1f));
         foreach (RaycastHit2D result in results)
         {
             if (result.collider != col)
