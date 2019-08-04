@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DownTrigger : MonoBehaviour, Trigger
+public class DownTrigger : MonoBehaviour, ITrigger
 {
     public GameObject player;
     public GameObject button;
