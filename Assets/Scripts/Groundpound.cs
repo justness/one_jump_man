@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ScreenShake : MonoBehaviour
+public class Groundpound : MonoBehaviour
 {
     public GameObject player;
-    public Camera cam;
+    public Camera camera;
 
-    private Transform cameraLocation;
+    private Transform transform;
     private float shakeDuration = 0f;
     private float shakeMagnitude = 0.2f;
     private float dampingSpeed = 1.0f;
@@ -20,28 +20,28 @@ public class ScreenShake : MonoBehaviour
 
     private void Awake()
     {
-        if (cameraLocation == null)
+        if (transform == null)
         {
-            cameraLocation = cam.GetComponent(typeof(Transform)) as Transform;
+            transform = camera.GetComponent(typeof(Transform)) as Transform;
         }
     }
 
     private void OnEnable()
     {
-        initialPosition = cam.transform.localPosition;
+        initialPosition = camera.transform.localPosition;
     }
 
     void FixedUpdate()
     {
         if (shakeDuration > 0)
         {
-            cam.transform.localPosition = initialPosition + Random.insideUnitSphere * shakeMagnitude;
+            camera.transform.localPosition = initialPosition + Random.insideUnitSphere * shakeMagnitude;
             shakeDuration -= Time.deltaTime * dampingSpeed;
         }
         else
         {
             shakeDuration = 0f;
-            cam.transform.localPosition = initialPosition;
+            camera.transform.localPosition = initialPosition;
         }
         if (player.GetComponent<Rigidbody2D>().velocity.y <= -5.0f)
         {

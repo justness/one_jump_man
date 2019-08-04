@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DownTrigger : MonoBehaviour, ITrigger
+public class DownTrigger : MonoBehaviour
 {
     public GameObject player;
     public GameObject button;
-    public bool Triggered { get; set; }
 
     void Start()
     {
-        Triggered = false;
+        
     }
     
     void Update()
@@ -26,7 +25,6 @@ public class DownTrigger : MonoBehaviour, ITrigger
             //Press button. Add script here for what pressing the button does.
             Debug.Log("pressed");
             button.transform.Translate(0.0f, -0.2f, 0.0f);
-            Triggered = true;
         }
     }
 }
