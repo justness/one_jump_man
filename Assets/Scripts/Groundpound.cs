@@ -30,7 +30,7 @@ public class Groundpound : MonoBehaviour
     {
         initialPosition = camera.transform.localPosition;
     }
-    
+
     void FixedUpdate()
     {
         if (shakeDuration > 0)
@@ -47,7 +47,7 @@ public class Groundpound : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.DownArrow))
             {
-                player.GetComponent<PlayerController>().fallMod = 20;
+                player.GetComponent<PlayerController>().fallMod = 30;
                 shakeDuration = 0.5f;
             }
             player.GetComponent<PlayerController>().fallMod = 2;
