@@ -914,7 +914,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 979154187}
-  camera: {fileID: 519420031}
+  cam: {fileID: 519420031}
 --- !u!1 &1159001881
 GameObject:
   m_ObjectHideFlags: 0
